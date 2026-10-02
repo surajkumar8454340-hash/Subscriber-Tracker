@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Subscriber Tracker</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f5fb;--card:#fff;--tx:#161827;--mu:#6f7489;--bd:#e6e8f1;--pr:#4f46e5;--ok:#12a150;--wa:#d98a06;--er:#dc3545}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1016;--card:#181b25;--tx:#eef0f8;--mu:#8e94a9;--bd:#272b3a;--pr:#8b85ff;--ok:#4ade80;--wa:#fbbf24;--er:#f87171}}
+:root[data-theme="dark"]{--bg:#0e1016;--card:#181b25;--tx:#eef0f8;--mu:#8e94a9;--bd:#272b3a;--pr:#8b85ff;--ok:#4ade80;--wa:#fbbf24;--er:#f87171}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0 auto;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:560px;padding:16px 14px 100px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start}#thm{width:42px;height:42px;border-radius:50%;border:1px solid var(--bd);background:var(--card);font-size:18px}.hd h1{font-size:24px;margin:2px 0 0;letter-spacing:-.4px}.hd p{margin:2px 0 14px;color:var(--mu);font-size:13px}
+.hero{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:20px;padding:18px;box-shadow:0 8px 24px #4f46e540}
+.hero span{font-size:13px;opacity:.85}.hero b{display:block;font-size:34px;letter-spacing:-1px;margin:2px 0}.hero small{opacity:.8}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+.chips button{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:11px 6px;color:var(--tx);font:inherit;text-align:center}
+.chips b{display:block;font-size:20px}.chips span{font-size:11.5px;color:var(--mu)}
+.chips button:nth-child(1) b{color:var(--ok)}.chips button:nth-child(2) b{color:var(--wa)}.chips button:nth-child(3) b{color:var(--er)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:4px 0 6px;z-index:3}
+input,select{width:100%;padding:13px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;margin-bottom:10px;outline:none}
+input:focus,select:focus{border-color:var(--pr);box-shadow:0 0 0 3px color-mix(in srgb,var(--pr) 20%,transparent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:none;padding:7px 14px;border-radius:20px;border:1px solid var(--bd);background:var(--card);color:var(--mu);font:inherit;font-size:13px}
+.tabs button.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.c{position:relative;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px 14px 12px 18px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px #0000000d}
+.c:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--sc)}
+.c[data-s=ok]{--sc:var(--ok)}.c[data-s=soon]{--sc:var(--wa)}.c[data-s=exp]{--sc:var(--er)}
+.r{display:flex;align-items:center;gap:11px}.inf{flex:1;min-width:0}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:17px;color:var(--sc);background:color-mix(in srgb,var(--sc) 15%,transparent);flex:none}
+.n{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m{font-size:12.5px;color:var(--mu)}
+.tag{font-size:12px;font-weight:600;padding:4px 10px;border-radius:20px;color:var(--sc);background:color-mix(in srgb,var(--sc) 14%,transparent);white-space:nowrap}
+.bar{height:5px;border-radius:5px;background:var(--bd);margin:12px 0 9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--sc);border-radius:5px}
+.m2{display:flex;justify-content:space-between;font-size:12px;color:var(--mu)}.m2 b{color:var(--tx);font-weight:600}
+.acts{display:flex;gap:6px;margin-top:12px}
+.acts button,.btn{padding:10px 12px;border-radius:11px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:13.5px;font-weight:500}
+.acts button{flex:1}.acts .ic{flex:none;width:42px;padding:10px 0}
+.acts .p,.btn.p{background:var(--pr);color:#fff;border-color:var(--pr)}
+.fab{position:fixed;right:18px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;border:0;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px #4f46e566;z-index:4}
+.sh{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;z-index:6}.sh.on{display:flex}
+.sh>div{background:var(--card);width:100%;max-width:560px;margin:auto;border-radius:22px 22px 0 0;padding:10px 18px 20px;max-height:92%;overflow:auto;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.hdl{display:block;width:40px;height:4px;border-radius:4px;background:var(--bd);margin:0 auto 12px}
+.sh h3{margin:0 0 12px;font-size:18px}
+label{display:block;font-size:12px;color:var(--mu);margin:0 0 4px 2px}
+.sh .acts{margin-top:6px}
+.em{text-align:center;color:var(--mu);padding:40px 0}
+summary{color:var(--mu);font-size:13px;padding:8px 0}
+textarea{width:100%;height:70px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:10px;font:inherit}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:24px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+#toast button{margin-left:12px;background:none;border:0;color:inherit;text-decoration:underline;font:inherit;font-weight:700}
+.rm{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:13px;color:var(--mu)}.rm input{width:18px;height:18px;margin:0}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.g3 div{background:var(--bg);border-radius:12px;padding:10px;text-align:center}.g3 b{display:block;font-size:14px}.g3 span{font-size:11px;color:var(--mu)}
+.ph{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);font-size:14px}.ph span{color:var(--mu);font-size:12.5px}.ph .m{word-break:break-all}
+.sr{display:flex;gap:8px}.sr input{flex:1;min-width:0}.sr select{width:auto;max-width:44%}
+.td{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--wa);border-radius:16px;padding:12px 14px;margin:6px 0 12px}.td>b{display:block;margin-bottom:4px}
+.tr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.tr button{padding:8px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;font-size:13px;white-space:nowrap}
+.ch{display:flex;align-items:flex-end;gap:8px;height:140px;margin:12px 0}.cb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.cb i{width:100%;background:linear-gradient(var(--pr),#7c3aed);border-radius:6px 6px 0 0}.cb span{font-size:10px;color:var(--mu);margin-bottom:2px}.cb em{font-size:11px;color:var(--mu);font-style:normal;margin-top:4px}
+.lk{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;align-items:center;justify-content:center;text-align:center;padding:20px}.lk.on{display:flex}.lk>div{width:100%;max-width:280px}.lk input{text-align:center;font-size:22px;letter-spacing:8px}
+.hs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #ffffff40}.hs b{font-size:15px;margin:0;letter-spacing:0}.hs span{font-size:11px}
+.pr{display:flex;align-items:center;gap:6px}.pr button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:8px;width:30px;height:30px;font-size:13px}
+#pe{z-index:7}#cf{z-index:8}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header class="hd"><div><h1>Subscribers</h1><p>Telegram premium tracker · <span id="sy">Local only</span></p></div><button id="thm" onclick="toggleT()" aria-label="Toggle theme"></button></header>
+<div class="hero"><span>This month's earnings</span><b id="sI">₹0</b><small id="sT"></small><div class="hs"><div><b id="sLm">₹0</b><span>Last month</span></div><div><b id="sMrr">₹0</b><span>Active value / month</span></div><div><b id="sAl">₹0</b><span>All-time</span></div></div></div>
+<div class="chips"><button onclick="setF('ok')"><b id="sA">0</b><span>Active</span></button><button onclick="setF('soon')"><b id="sS">0</b><span>Expiring soon</span></button><button onclick="setF('exp')"><b id="sE">0</b><span>Expired</span></button></div>
+<div class="top"><div class="sr"><input id="q" placeholder="Search by name or @username"><select id="so" onchange="render()"><option value="e">Soonest expiry</option><option value="n">Name A–Z</option><option value="a">Amount: high</option><option value="c">Newest</option></select></div><div class="tabs" id="tabs"></div></div>
+<div id="todo"></div>
+<div id="list"></div>
+<details style="margin-top:18px"><summary>Insights</summary><div id="ins"></div></details>
+<details style="margin-top:8px"><summary>Reminder message</summary>
+<p class="m">Placeholders: {name} {date} {amount} {upi}</p>
+<textarea id="rt" style="height:96px" oninput="prev()"></textarea>
+<input id="ru" placeholder="Your UPI ID (optional)" style="margin-top:8px" oninput="prev()">
+<p class="m" id="rp"></p>
+<div class="acts"><button onclick="setTpl('en')">English</button><button onclick="setTpl('hi')">Hinglish</button><button class="p" onclick="saveTpl()">Save</button></div></details>
+<details style="margin-top:8px"><summary>Install on home screen</summary><p class="m">Android (Chrome): menu ⋮ → Add to Home screen. iPhone (Safari): Share → Add to Home Screen. It opens this same app link, and you stay signed in to Claude for cloud sync.</p></details>
+<details style="margin-top:8px"><summary style="color:var(--mu)">Backup, export &amp; lock</summary>
+  <p class="m">Your data is stored only in this browser. Copy a backup regularly and keep it somewhere safe (Notes or Telegram Saved Messages).</p>
+  <textarea id="bk" placeholder="Paste your backup here to restore"></textarea>
+  <div class="acts"><button onclick="backup()">Copy backup</button><button onclick="restore()">Restore</button></div>
+  <p class="m" style="margin-top:14px">Export (opens in Excel / Sheets)</p><div class="acts"><button onclick="exportCsv('c')">Customers CSV</button><button onclick="exportCsv('p')">Payments CSV</button></div>
+  <p class="m" style="margin-top:14px">App lock: a privacy screen for this device, not strong security</p><input id="pn" type="password" inputmode="numeric" maxlength="4" placeholder="New 4-digit PIN"><div class="acts"><button onclick="setPin()">Set PIN</button><button onclick="noPin()">Remove PIN</button></div>
+</details>
+<button class="fab" onclick="openF()" aria-label="Add"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><div id="toast"></div>
+
+<div class="sh" id="sh" onclick="if(event.target===this)closeF()"><div><i class="hdl"></i>
+  <h3 id="ft">New customer</h3>
+  <label>Name</label><input id="fn">
+  <label>Telegram username (optional)</label><input id="ft2" placeholder="@username">
+  <label>Amount (₹)</label><input id="fa" type="number" value="500"><div id="er"><label>Expiry date</label><input id="fe" type="date"></div>
+  <div id="pr"><label>Payment date</label><input id="fd" type="date">
+  <label>Number of months</label><input id="fm" type="number" value="1" min="1"><label>Payment mode</label><select id="fmo"><option>UPI</option><option>Cash</option><option>Other</option></select><label>Transaction ID (optional)</label><input id="ftx"></div>
+  <div class="acts"><button class="btn p" onclick="save()">Save</button><button class="btn" onclick="closeF()">Cancel</button></div>
+</div></div>
+
+<div class="sh" id="cf" onclick="if(event.target===this)cfClose()"><div><i class="hdl"></i><h3 id="cfT"></h3><div class="acts"><button class="btn p" onclick="var f=cfFn;cfClose();if(f)f()">Confirm</button><button class="btn" onclick="cfClose()">Cancel</button></div></div></div>
+<div class="sh" id="rn" onclick="if(event.target===this)rnClose()"><div><i class="hdl"></i><h3 id="rnT"></h3><label>Duration</label><select id="rnn" onchange="rna.value=get(rnId).amt*rnn.value"><option value="1">1 month</option><option value="2">2 months</option><option value="3">3 months</option><option value="6">6 months</option><option value="12">12 months</option></select>
+<label>Amount (₹)</label><input id="rna" type="number"><label>Payment mode</label><select id="rnm"><option>UPI</option><option>Cash</option><option>Other</option></select><label>Transaction ID (optional)</label><input id="rnx">
+<div class="acts"><button class="btn p" onclick="rnOk()">Confirm renewal</button><button class="btn" onclick="rnClose()">Cancel</button></div></div></div>
+<div class="sh" id="dt" onclick="if(event.target===this)dtClose()"><div><i class="hdl"></i><div id="dtB"></div><div class="acts"><button class="btn p" onclick="var i=detId;dtClose();openF(i)">Edit</button><button class="btn" onclick="dtClose()">Close</button></div></div></div>
+<div class="lk" id="lk"><div><h3>🔒 Enter PIN</h3><input id="lkp" type="password" inputmode="numeric" maxlength="4" placeholder="••••" onkeydown="if(event.key==='Enter')unlock()"><button class="btn p" style="width:100%" onclick="unlock()">Unlock</button><p id="lke" class="m"></p></div></div>
+<div class="sh" id="pe" onclick="if(event.target===this)peClose()"><div><i class="hdl"></i><h3>Edit payment</h3>
+<label>Date</label><input id="ped" type="date"><label>Amount (₹)</label><input id="pea" type="number"><label>Mode</label><select id="pem"><option>UPI</option><option>Cash</option><option>Other</option></select><label>Transaction ID</label><input id="pex">
+<div class="acts"><button class="btn p" onclick="peOk()">Save</button><button class="btn" onclick="peClose()">Cancel</button></div></div></div>
+<script>
+var K='subs_v1',data=[],flt='all',editId=null;
+try{data=JSON.parse(localStorage.getItem(K)||'[]')}catch(e){data=[]}
+var T_EN='Hi {name}, your premium subscription expires on {date}. Please send ₹{amount} to renew.{upi} Thank you!',T_HI='Hi {name}, aapka premium subscription {date} ko khatam ho raha hai. Renew ke liye ₹{amount} bhej dein.{upi} Dhanyavaad!',cfg={tpl:T_EN,upi:''};
+try{var cs=localStorage.getItem('subs_cfg');if(cs)cfg=Object.assign(cfg,JSON.parse(cs))}catch(e){}
+function fill(t,u,n,d,a){return t.replace(/\{name\}/g,n).replace(/\{date\}/g,d).replace(/\{amount\}/g,a).replace(/\{upi\}/g,u?' UPI: '+u:'')}
+var cloud=null,pt,tt;
+function setSync(t){var e=document.getElementById('sy');if(e)e.textContent=t}
+function push(){if(!cloud)return;clearTimeout(pt);setSync('Syncing...');pt=setTimeout(function(){cloud.set({list:data,cfg:cfg,ts:+localStorage.getItem('subs_ts')||Date.now()}).then(function(){setSync('☁ Synced')}).catch(function(){setSync('Sync failed')})},600)}
+function persist(){try{localStorage.setItem(K,JSON.stringify(data));localStorage.setItem('subs_ts',Date.now());localStorage.setItem('subs_cfg',JSON.stringify(cfg))}catch(e){toast('Storage blocked: data will not be saved')}push()}
+function iso(d){var z=d.getTimezoneOffset();return new Date(d-z*60000).toISOString().slice(0,10)}
+function today(){return iso(new Date())}
+function addM(s,n,dd){var d=new Date(s+'T00:00:00'),day=dd||d.getDate();d.setDate(1);d.setMonth(d.getMonth()+n);var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return iso(d)}
+function diff(s){return Math.round((new Date(s+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5)}
+function fmt(s){return new Date(s+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
+function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function st(c){var d=diff(c.exp);return d<0?'exp':d<=3?'soon':'ok'}
+function openF(id){editId=id||null;var c=data.find(function(x){return x.id===id});
+  document.getElementById('ft').textContent=c?'Edit customer':'New customer';
+  fn.value=c?c.name:'';ft2.value=c?c.tg:'';fa.value=c?c.amt:500;fd.value=today();fm.value=1;fmo.value='UPI';ftx.value='';
+  document.getElementById('pr').style.display=c?'none':'block';document.getElementById('er').style.display=c?'block':'none';if(c)fe.value=c.exp;setTimeout(function(){fn.focus()},60);
+  document.getElementById('sh').classList.add('on')}
+function closeF(){document.getElementById('sh').classList.remove('on')}
+function save(){var n=fn.value.trim();if(!n){fn.focus();return}
+  var a=+fa.value||0,t=ft2.value.trim();
+  if(editId){var c=data.find(function(x){return x.id===editId});c.name=n;c.tg=t;c.amt=a;if(fe.value&&fe.value!==c.exp){c.exp=fe.value;c.day=new Date(fe.value+'T00:00:00').getDate();if(diff(c.exp)>=0)c.removed=false}}
+  else{var d=fd.value||today(),m=Math.max(1,+fm.value||1);
+    data.push({id:Date.now(),name:n,tg:t,amt:a,day:new Date(d+'T00:00:00').getDate(),exp:addM(d,m),pays:[{d:d,a:a*m,m:fmo.value,t:ftx.value.trim()}]})}
+  persist();closeF();render()}
+function tgl(id){var c=get(id);c.removed=!c.removed;persist();render()}
+function get(id){return data.find(function(x){return x.id===id})}
+var cfFn=null;
+function ask(m,fn){cfFn=fn;document.getElementById('cfT').textContent=m;document.getElementById('cf').classList.add('on')}
+function cfClose(){document.getElementById('cf').classList.remove('on');cfFn=null}
+function fb(t){var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove()}
+function copy(t){try{navigator.clipboard.writeText(t).catch(function(){fb(t)})}catch(e){fb(t)}}
+var rnId=null,detId=null;
+function renew(id){var c=get(id);rnId=id;rnT.textContent='Renew '+c.name;rnn.value='1';rna.value=c.amt;rnm.value='UPI';rnx.value='';document.getElementById('rn').classList.add('on')}
+function rnClose(){document.getElementById('rn').classList.remove('on')}
+function rnOk(){var c=get(rnId),act=diff(c.exp)>0,base=act?c.exp:today(),sn={exp:c.exp,day:c.day,rm:c.removed};if(!act)c.day=new Date().getDate();
+  var n=+rnn.value||1,pay={d:today(),a:+rna.value||0,m:rnm.value,t:rnx.value.trim()};c.exp=addM(base,n,c.day);c.pays.push(pay);c.removed=false;
+  persist();render();rnClose();
+  toast('Renewed until '+fmt(c.exp),function(){c.exp=sn.exp;c.day=sn.day;c.removed=sn.rm;var i=c.pays.indexOf(pay);if(i>-1)c.pays.splice(i,1);persist();render();toast('Renewal undone')})}
+function since(c){return c.pays.reduce(function(m,p){return p.d<m?p.d:m},c.pays[0].d)}
+function last(c){return c.pays.reduce(function(m,p){return p.d>m?p.d:m},c.pays[0].d)}
+var peI=null;
+function editP(i){var c=get(detId),p=c.pays[i];peI=i;ped.value=p.d;pea.value=p.a;pem.value=p.m||'UPI';pex.value=p.t||'';document.getElementById('pe').classList.add('on')}
+function peClose(){document.getElementById('pe').classList.remove('on')}
+function peOk(){var c=get(detId),p=c.pays[peI];if(!ped.value){toast('Pick a date');return}p.d=ped.value;p.a=+pea.value||0;p.m=pem.value;p.t=pex.value.trim();persist();render();showD(detId);peClose();toast('Payment updated')}
+function delP(i){var c=get(detId);if(c.pays.length<2){toast("Last payment can't be deleted. Delete the customer instead.");return}
+  var p=c.pays[i];ask('Delete ₹'+p.a+' payment of '+fmt(p.d)+'?',function(){c.pays.splice(i,1);persist();render();showD(detId);toast('Payment deleted',function(){c.pays.splice(i,0,p);persist();render();showD(detId)})})}
+function showD(id){var c=get(id);if(!c)return;detId=id;var ltv=c.pays.reduce(function(x,p){return x+p.a},0);
+  document.getElementById('dtB').innerHTML='<h3>'+esc(c.name)+'</h3><div class="m">'+esc(c.tg)+'</div>'
+  +'<div class="g3"><div><b>₹'+ltv+'</b><span>Lifetime value</span></div><div><b>'+c.pays.length+'</b><span>Payments</span></div><div><b>'+fmt(since(c))+'</b><span>Customer since</span></div></div>'
+  +'<label>Note</label><textarea id="dn" onblur="saveN()" placeholder="e.g. discount given, friend referral">'+esc(c.note)+'</textarea>'
+  +'<label style="margin-top:12px">Payment history</label>'+c.pays.map(function(p,i){return [p,i]}).sort(function(x,y){return y[0].d.localeCompare(x[0].d)||y[1]-x[1]}).map(function(x){var p=x[0],i=x[1];return '<div class="ph"><div><b>₹'+p.a+'</b> <span>'+esc(p.m||'')+'</span>'+(p.t?'<div class="m">Txn: '+esc(p.t)+'</div>':'')+'</div><div class="pr"><span>'+fmt(p.d)+'</span><button onclick="editP('+i+')" aria-label="Edit payment">✎</button><button onclick="delP('+i+')" aria-label="Delete payment">✕</button></div></div>'}).join('');
+  document.getElementById('dt').classList.add('on')}
+function saveN(){var c=get(detId),n=document.getElementById('dn');if(c&&n&&n.value!==(c.note||'')){c.note=n.value;persist();render()}}
+function dtClose(){saveN();document.getElementById('dt').classList.remove('on');detId=null}
+function del(id){var c=get(id);ask('Delete '+c.name+'?',function(){var i=data.indexOf(c);data=data.filter(function(x){return x.id!==id});persist();render();toast('Deleted',function(){data.splice(Math.min(i,data.length),0,c);persist();render()})})}
+function remind(id){var c=get(id);
+  var msg=fill(cfg.tpl,cfg.upi,c.name,fmt(c.exp),c.amt);
+  copy(msg);toast('Reminder message copied');
+  var u=encodeURIComponent((c.tg||'').replace('@','').trim());
+  if(u){var w=window.open('https://t.me/'+u,'_blank');if(!w)toast('Copied. Open Telegram and paste it')}}
+function backup(){var s=JSON.stringify(data);bk.value=s;bk.select();copy(s);toast('Backup copied')}
+function restore(){var d;try{d=JSON.parse(bk.value);if(!Array.isArray(d))throw 0}catch(e){toast('Invalid backup');return}
+  ask('Restore '+d.length+' customers? This replaces current data.',function(){data=d;persist();render();toast('Restored')})}
+function applyT(t){document.documentElement.setAttribute('data-theme',t)}
+function curT(){return document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}
+function icon(){document.getElementById('thm').textContent=curT()==='dark'?'☀️':'🌙'}
+function toggleT(){var t=curT()==='dark'?'light':'dark';applyT(t);try{localStorage.setItem('theme',t)}catch(e){}icon()}
+try{var th=localStorage.getItem('theme');if(th)applyT(th)}catch(e){}
+function renderX(){
+ var td=[];data.forEach(function(c){var d=diff(c.exp);
+  if(d<0&&!c.removed)td.push([c,'Expired '+(-d)+'d ago · remove from channel','tgl('+c.id+')','Mark removed']);
+  else if(d>=0&&d<=2)td.push([c,d===0?'Expires today':'Expires in '+d+'d','remind('+c.id+')','Remind'])});
+ document.getElementById('todo').innerHTML=td.length?'<div class="td"><b>Today\'s to-do ('+td.length+')</b>'+td.slice(0,6).map(function(x){return '<div class="tr"><div><div class="n">'+esc(x[0].name)+'</div><div class="m">'+x[1]+'</div></div><button onclick="'+x[2]+'">'+x[3]+'</button></div>'}).join('')+(td.length>6?'<div class="m">+'+(td.length-6)+' more</div>':'')+'</div>':'';
+ var now=new Date(),ms=[],i;for(i=5;i>=0;i--){var d0=new Date(now.getFullYear(),now.getMonth()-i,1);ms.push({k:d0.getFullYear()+'-'+('0'+(d0.getMonth()+1)).slice(-2),l:d0.toLocaleDateString('en-IN',{month:'short'}),v:0})}
+ var all=0,el=0,rn=0;
+ data.forEach(function(c){var rpt=c.pays.length>1;if(rpt||diff(c.exp)<0)el++;if(rpt)rn++;c.pays.forEach(function(p){var v=+p.a||0;all+=v;var m=ms.filter(function(x){return x.k===p.d.slice(0,7)})[0];if(m)m.v+=v})});
+ var mx=Math.max.apply(null,ms.map(function(x){return x.v}))||1;
+ document.getElementById('ins').innerHTML='<div class="ch">'+ms.map(function(m){return '<div class="cb"><span>'+'₹'+m.v+'</span><i style="height:'+Math.max(2,Math.round(m.v/mx*90))+'px"></i><em>'+m.l+'</em></div>'}).join('')+'</div>'
+ +'<div class="g3"><div><b>'+(el?Math.round(rn/el*100)+'%':'—')+'</b><span>Renewal rate</span></div><div><b>₹'+(data.length?Math.round(all/data.length):0)+'</b><span>Avg per customer</span></div><div><b>₹'+all+'</b><span>All-time</span></div></div>'}
+function hp(x){return btoa(x+'|trk')}
+function lockInit(){try{if(localStorage.getItem('subs_pin'))document.getElementById('lk').classList.add('on')}catch(e){}}
+function unlock(){try{if(hp(lkp.value)===localStorage.getItem('subs_pin')){document.getElementById('lk').classList.remove('on');lkp.value='';lke.textContent=''}else{lke.textContent='Wrong PIN';lkp.value=''}}catch(e){}}
+function setPin(){var v=pn.value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}try{localStorage.setItem('subs_pin',hp(v));pn.value='';toast('PIN set')}catch(e){toast('Cannot save PIN')}}
+function noPin(){try{localStorage.removeItem('subs_pin');toast('PIN removed')}catch(e){}}
+function cc(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+async function exportCsv(k){var dl=window.claude&&claude.use?await claude.use('downloads'):null;
+ var r=k==='p'?[['Name','Telegram','Date','Amount','Mode','Txn ID']]:[['Name','Telegram','Monthly amount','Expiry','Status','Customer since','Payments','Lifetime value','Removed from channel','Note']];
+ data.forEach(function(c){if(k==='p')c.pays.forEach(function(p){r.push([c.name,c.tg,p.d,p.a,p.m||'',p.t||''])});else r.push([c.name,c.tg,c.amt,c.exp,{ok:'Active',soon:'Expiring soon',exp:'Expired'}[st(c)],since(c),c.pays.length,c.pays.reduce(function(x,p){return x+p.a},0),c.removed?'Yes':'No',c.note||''])});
+ var f2=(k==='p'?'payments-':'customers-')+today()+'.csv',tx='\ufeff'+r.map(function(x){return x.map(cc).join(',')}).join('\n');
+ try{if(dl)await dl.save({filename:f2,data:tx});else{var u=URL.createObjectURL(new Blob([tx],{type:'text/csv'})),an=document.createElement('a');an.href=u;an.download=f2;document.body.appendChild(an);an.click();an.remove()}}catch(e){toast('Export cancelled')}}
+function prev(){rp.textContent='Preview: '+fill(rt.value,ru.value.trim(),'Rahul',fmt(today()),500)}
+function loadCfg(){rt.value=cfg.tpl;ru.value=cfg.upi||'';prev()}
+function setTpl(k){rt.value=k==='hi'?T_HI:T_EN;prev()}
+function saveTpl(){cfg.tpl=rt.value.trim()||T_EN;cfg.upi=ru.value.trim();persist();toast('Reminder message saved')}
+function setF(f){flt=flt===f?'all':f;render()}
+function toast(m,fn){var t=document.getElementById('toast');t.textContent=m;if(fn){var b=document.createElement('button');b.textContent='Undo';b.onclick=function(){fn();t.classList.remove('on')};t.appendChild(b);t.style.pointerEvents='auto'}else t.style.pointerEvents='none';t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},fn?5000:1800)}
+function render(){
+  var q=document.getElementById('q').value.toLowerCase(),mo=today().slice(0,7),inc=0,a=0,s=0,e=0,rm=0,lm=0,al=0,mrr=0,lmk=(function(){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return iso(d).slice(0,7)})();
+  data.forEach(function(c){var t=st(c);if(t==='exp'){e++;if(!c.removed)rm++}else{a++;mrr+=+c.amt||0;if(t==='soon')s++}
+    c.pays.forEach(function(p){var k=p.d.slice(0,7),v=+p.a||0;al+=v;if(k===mo)inc+=v;if(k===lmk)lm+=v})});
+  sA.textContent=a;sS.textContent=s;sE.textContent=e;sI.textContent='₹'+inc;sLm.textContent='₹'+lm;sMrr.textContent='₹'+mrr;sAl.textContent='₹'+al;sT.textContent=data.length+' customers · '+a+' active';
+  var tabs=[['all','All ('+data.length+')'],['ok','Active'],['soon','Expiring soon'],['exp','Expired'],['rm','To remove ('+rm+')']];
+  document.getElementById('tabs').innerHTML=tabs.map(function(t){return '<button class="'+(flt===t[0]?'on':'')+'" onclick="flt=\''+t[0]+'\';render()">'+t[1]+'</button>'}).join('');
+  var L=data.filter(function(c){return(flt==='all'||(flt==='ok'?st(c)!=='exp':flt==='rm'?(st(c)==='exp'&&!c.removed):st(c)===flt))&&(c.name+' '+c.tg+' '+(c.note||'')).toLowerCase().indexOf(q)>-1})
+    .sort(function(x,y){var o=document.getElementById('so').value,e=x.exp<y.exp?-1:1;return o==='n'?x.name.localeCompare(y.name):o==='a'?(y.amt-x.amt)||e:o==='c'?since(y).localeCompare(since(x)):e});
+  document.getElementById('list').innerHTML=L.length?L.map(function(c){var d=diff(c.exp),t=st(c);
+    var lbl=d<0?'Expired '+(-d)+'d ago':d===0?'Expires today':d+'d left',pct=Math.max(0,Math.min(100,d/30*100));
+    return '<div class="c" data-s="'+t+'"><div class="r" onclick="showD('+c.id+')" style="cursor:pointer"><div class="av">'+esc(c.name.charAt(0).toUpperCase())+'</div><div class="inf"><div class="n">'+esc(c.name)+'</div><div class="m">'+(c.tg?esc(c.tg)+' · ':'')+'₹'+c.amt+'/month'+(c.note?' · 📝':'')+'</div></div><span class="tag">'+lbl+'</span></div>'
+    +'<div class="bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="m2"><span>Expiry <b>'+fmt(c.exp)+'</b></span><span>Last paid <b>'+fmt(last(c))+'</b></span></div>'
+    +(t==='exp'?'<label class="rm"><input type="checkbox" '+(c.removed?'checked':'')+' onchange="tgl('+c.id+')"> Removed from channel</label>':'')
+    +'<div class="acts"><button class="p" onclick="renew('+c.id+')">Renew</button><button onclick="remind('+c.id+')">Reminder</button><button class="ic" onclick="openF('+c.id+')" aria-label="Edit">✎</button><button class="ic" onclick="del('+c.id+')" aria-label="Delete">🗑</button></div></div>'
+  }).join('')
+  :'<div class="em">No customers found.<br>Tap + to add one.</div>';renderX()}
+document.getElementById('q').oninput=render;
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeF();cfClose();rnClose();peClose();dtClose()}});
+document.getElementById('sh').addEventListener('keydown',function(e){if(e.key==='Enter')save()});
+lockInit();icon();render();loadCfg();
+(async function(){try{if(!window.claude||!claude.use)return;var db=await claude.use('db'),us=await claude.use('user');if(!db||!us)return;var id=await us.id();if(!id)return;
+ cloud=db.doc('data/users/'+id+'/store');var sn=await cloud.get(),d=sn.exists?sn.data():null,lt=0;try{lt=+localStorage.getItem('subs_ts')||0}catch(e){}
+ if(d&&Array.isArray(d.list)&&(+d.ts||0)>=lt){data=JSON.parse(JSON.stringify(d.list));if(d.cfg){cfg=Object.assign(cfg,JSON.parse(JSON.stringify(d.cfg)));loadCfg()}try{localStorage.setItem(K,JSON.stringify(data));localStorage.setItem('subs_ts',d.ts||Date.now())}catch(e){}render();setSync('☁ Synced')}
+ else if(data.length)push();else setSync('☁ Synced')}catch(e){setSync('Local only')}})();
+</script>
+</body>
+</html>
